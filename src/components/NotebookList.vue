@@ -33,22 +33,11 @@
 
   export default {
     data () {
-      return {
-
-      }
+      return {}
     },
     created() {
-      Auth.getInfo()
-        .then(res => {
-          if(!res.isLogin) {
-            this.$router.push({ path: '/login' })
-          }
-        })
-      // Notebooks.getAll()
-      //     .then(res => {
-      //       this.notebooks = res.data
-      //     })
-      this.$store.dispatch('getNotebooks')
+      this.checkLogin({ path: '/login' })
+      this.getNotebooks()
     },
     computed: {
       ...mapGetters(['notebooks'])
@@ -58,7 +47,8 @@
         'getNotebooks',
         'addNotebook',
         'updateNotebook',
-        'deleteNotebook'
+        'deleteNotebook',
+        'checkLogin'
       ]),
       onCreate() {
         this.$prompt('输入新笔记本标题', '创建笔记本', {

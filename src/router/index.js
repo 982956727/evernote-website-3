@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Login from "@/components/Login";
 import Notebooks from "../components/NotebookList.vue";
 import NoteDetail from '@/components/NoteDetail'
-import Trash from "@/components/TrashDetail";
+import TrashDetail from "@/components/TrashDetail";
 
 Vue.use(Router)
 
@@ -23,7 +23,7 @@ export default new Router({
     },
     {
       path: "/trash",
-      component: Trash
+      component: TrashDetail
     }
   ]
 });

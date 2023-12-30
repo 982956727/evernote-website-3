@@ -34,16 +34,7 @@
 <script>
   import Auth from '../apis/auth'
   import Bus from '../helpers/bus'
-
-  // Auth.getInfo()
-  //   .then(data => {
-  //     console.log(data)
-  //   })
-
-  // request('/auth')
-  //     .then(data => {
-  //   console.log(data)
-  // })
+  import { mapGetters,mapActions } from 'vuex'
 
   export default {
     name: 'Login',
@@ -66,6 +57,10 @@
     }
   },
   methods: {
+    ...mapActions({
+      loginUser: 'login',
+      registerUser: 'register'
+    }),
     showRegister() {
       this.isShowRegister = true
       this.isShowLogin = false
@@ -87,13 +82,12 @@
         this.register.notice = result2.notice
         return
       }
-      Auth.register({
+      this.registerUser({
         username: this.register.username,
-        password: this.register.password
-      }).then(data => {
+        password: this.register.password      
+      }).then(() => { 
         this.register.isError = false
         this.register.notice = ''
-        Bus.$emit('userInfo',{ username: this.register.username})
         this.$router.push({ path: 'notebooks' })
       }).catch(data => {
         this.register.isError = true
@@ -114,13 +108,12 @@
         return
       }
 
-      Auth.login({
+      this.loginUser({
         username: this.login.username,
         password: this.login.password
-      }).then(data => {
+      }).then(() => {
         this.login.isError = false
-        this.login.notice = ''
-        Bus.$emit('userInfo',{ username: this.login.username })
+        this.login.notice = ''  
         this.$router.push({ path: 'notebooks' })
       }).catch(data => {
         this.login.isError = true
@@ -175,7 +168,7 @@
 
   .main {
     flex: 1;
-    background: #36bc64 url(//cloud.hunger-valley.com/17-12-13/38476998.jpg-middle) center center no-repeat ;
+    background: #fb7299 url(https://static.xiedaimala.com/xdml/image/f40ceb64-df08-4420-9226-7f76dbff15d5/2021-10-12-11-47-33.jpg) center center no-repeat ;
     background-size: contain;
  }
  .form {
@@ -194,7 +187,7 @@
     }
   }
   .button {
-    background-color: #2bb964;
+    background-color: #fb7299;
     height: 36px;
     line-height: 36px;
     text-align: center;

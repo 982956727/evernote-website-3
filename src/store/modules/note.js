@@ -4,7 +4,7 @@ import { Message } from "element-ui";
 const state = {
   notes: null,
   curNoteId: null
-};
+}
 
 const getters = {
   notes: state => state.notes || [],
@@ -49,24 +49,19 @@ const actions = {
     return Note.addNote({ notebookId },{ title,content })
       .then(res => {
         console.log('add success...',res)
-        commit("addNote", { notes: res.data })
+        commit("addNote", { note: res.data })
       })
   },
   updateNote({ commit },{ noteId,title,content }) {
     return Note.updateNote({ noteId },{ title,content })
       .then(res => {
-          commit("updateNote", {
-            noteId,
-            title,
-            content
-          });
-        }
-    )
+          commit("updateNote", {noteId,title,content})
+        })
   },
   deleteNote({ commit },{ noteId }) {
-    return Notebook.deleteNotebook({ noteId })
+    return Note.deleteNote({ noteId })
       .then(res => {
-        commit("deleteNotebook", { noteId })
+        commit("deleteNote", { noteId })
         Message.success(res.msg)
       })
   }

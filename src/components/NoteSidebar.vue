@@ -17,7 +17,7 @@
       <div>标题</div>
     </div>
     <ul class="notes">
-      <li v-for="note in notes">
+      <li v-for="note in notes" :key="note.id">
         <router-link :to="`/note?noteId=${note.id}&notebookId=${curBook.id}`">
           <span class="date">{{note.updatedAtFriendly}}</span>
           <span class="title">{{note.title}}</span>
@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import Notebooks from '../apis/notebooks'
-import Notes from '../apis/notes'
 
 import { mapState,mapGetters,mapMutations,mapActions } from 'vuex'
 

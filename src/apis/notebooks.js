@@ -28,7 +28,6 @@
       return request(URL.UPDATE.replace(':id',notebookId),'PATCH',{ title })
     },
     deleteNotebook(notebookId) {
-      
       return request(URL.DELETE.replace(':id',notebookId),'DELETE')
     },
     addNotebook({ title = ''} = { title: ''}) {
@@ -43,5 +42,4 @@
           })
       })
     }
-
   }

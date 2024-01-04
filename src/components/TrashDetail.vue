@@ -8,7 +8,7 @@
       </div>
       <ul class="notes">
         <li v-for="note in trashNotes">
-          <router-link :to="`/trash?noteId=${note.id} `">
+          <router-link :to="`/trash?noteId=${note.id}`">
             <span class="date">{{note.updatedAtFriendly}}</span>
             <span class="title">{{note.title}}</span>
           </router-link>
@@ -45,20 +45,25 @@ let md = new MarkdownIt()
 export default {
   data() {
     return {
-      belongTo: '我的笔记本', 
     }
   },
   created() {
     this.checkLogin({ path: '/login' })
+    this.getNotebooks()
     this.getTrashNotes()
       .then(() => {
         this.setCurTrashNote({ curTrashNoteId: this.$route.query.noteId })
+        this.$router.replace({
+          path: '/trash',
+          query: { noteId: this.curTrashNote.id }
+        })
       })
   },
   computed: {
     ...mapGetters([
       'trashNotes',
-      'curTrashNote'
+      'curTrashNote',
+      'belongTo'
     ]),
     compiledMarkdown() {
       return md.render(this.curTrashNote.content || '')
@@ -72,22 +77,40 @@ export default {
       'checkLogin',
       'deleteTrashNote',
       'revertTrashNote',
-      'getTrashNotes'
+      'getTrashNotes',
+      'getNotebooks'
     ]),
     onDelete() {
-      console.log({ noteId: this.curTrashNote.id })
-      this.deleteTrashNote({ noteId: this.curTrashNote.id })
+      this.$confirm('删除后将无法恢复', '确定删除？', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          return this.deleteTrashNote({ noteId: this.curTrashNote.id })
+        }).then(() => {
+          console.log('delete success')
+          this.setCurTrashNote()
+          this.$router.replace({
+            path: '/trash',
+            query: { noteId: this.curTrashNote.id }
+          })
+        })
     },
     onRevert() {
       this.revertTrashNote({ noteId: this.curTrashNote.id })
-    },
-    beforeRouteUpdate(to,from,next) {
-      console.log(to,from)
-      this.setCurTrashNote({ curTrashNoteId: to.query.noteId })
-      next()    
-  }, 
+        .then(() => {
+          this.setCurTrashNote()
+          this.$router.replace({
+            path: '/trash',
+            query: { noteId: this.curTrashNote.id }
+          })
+        })
+    }
+  },
+  beforeRouteUpdate(to,from,next) {
+    this.setCurTrashNote({ curTrashNoteId: to.query.noteId })
+    next()    
   }
-
 }
 </script>
 
@@ -102,12 +125,12 @@ export default {
     flex: 1;
 
     .note-bar {
-      .action {
-        float: right; 
-        margin-left: 10px;
-        padding: 2px 4px;
-        font-size: 12px;
-      }
+        .action {
+          float: right; 
+          margin-left: 10px;
+          padding: 2px 4px;
+          font-size: 12px;
+        }
     }
   }
 </style>

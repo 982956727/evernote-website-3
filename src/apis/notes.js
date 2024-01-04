@@ -34,7 +34,7 @@ export default {
   },
   addNote({ notebookId },{ title = "",content = '' } = { title: "",content: '' }) {
     return new Promise((resolve,reject) => {
-      return request(URL.ADD.replace(":notebookId", notebookId), "POST", {title,content})
+      return (URL.ADD.replace(":notebookId", notebookId), "POST", {title,content})
         .then(res => {
           res.data.createdAtFriendly = friendlyDate(res.data.createdAt)
           res.data.updatedAtFriendly = friendlyDate(res.data.updatedAt)

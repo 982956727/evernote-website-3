@@ -16,7 +16,7 @@ const getters = {
  }
 }
 
-const mutations = {
+const mutations = { 
   setNotebooks(state,payload) {
     state.notebooks = payload.notebooks
   },
@@ -36,7 +36,8 @@ const mutations = {
 }
 
 const actions = {
-  getNotebooks({ commit }) {
+  getNotebooks({ commit,state }) {
+    if(state.notebooks !== null) return Promise.resolve()
     return  Notebook.getAll()
       .then(res => {
         commit('setNotebooks',{ notebooks: res.data })

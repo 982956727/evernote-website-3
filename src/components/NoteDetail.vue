@@ -48,7 +48,8 @@ export default {
   computed: {
     ...mapGetters([
       'notes',
-      'curNote'
+      'curNote',
+      'curBook'
     ]),
 
     previewContent() {
@@ -82,7 +83,7 @@ export default {
   beforeRouteUpdate(to,from,next) {
     this.setCurNote({ curNoteId: to.query.noteId })
     next()
-  },  
+  }  
 }
 </script>
 

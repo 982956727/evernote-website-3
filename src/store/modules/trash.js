@@ -2,16 +2,20 @@ import Trash from '../../apis/trash'
 import { Message } from 'element-ui'
 
 const state = {
-  trashNote: null,
-  curTrashNote: null
+  trashNotes: null,
+  curTrashNoteId: null
 }
 
 const getters = {
-  trashNotes: state => state.trashNote || [],
+  trashNotes: state => state.trashNotes || [],
 
   curTrashNote: (state,getters) => {
     if(!state.curTrashNoteId) return getters.trashNotes[0] || {}
     return state.trashNotes.find(note => note.id == state.curTrashNoteId) || {}
+  },
+  belongTo: (state,getters,rootState,rootGetters) => {
+    let notebook = rootGetters.notebooks.find(notebook => notebook.id == getters.curTrashNote.notebookId) || {}
+    return notebook.title || ''
   }
 }
 
@@ -23,9 +27,9 @@ const mutations = {
     setTrashNotes.unshift(payload.note)
   },
   deleteTrashNote(state,payload) {
-    state.curTrashNote = state.trashNotes.filter(note => note.id != payload.noteId)
+    state.trashNotes = state.trashNotes.filter(note => note.id != payload.noteId)
   },
-  setCurTrashNote(state,payload) {
+  setCurTrashNote(state,payload = {}) {
     state.curTrashNoteId = payload.curTrashNoteId
   }
 }
@@ -41,18 +45,18 @@ const actions = {
     return Trash.deleteNote({ noteId })
       .then(res => {
         commit("deleteTrashNote", { noteId })
-        Message.success(res.msg)
-    })
+        Message.success(res.msg)  
+    })  
   },
   revertTrashNote({ commit }, { noteId }) {
     return Trash.revertNote({ noteId })
       .then(res => {
-        commit("deleteTrashNote", { noteId })
+        commit("deleteTrashNote", { noteId })     
         Message.success(res.msg)
     })  
   }
 }
-
+  
 export default {
   state,
   getters,

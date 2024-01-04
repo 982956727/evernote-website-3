@@ -3,7 +3,6 @@
 </template>
 
 <script>
-  import Auth from '../apis/auth'
   import { mapGetters,mapActions } from 'vuex'
 
   export default {
@@ -11,7 +10,7 @@
       return {}
     },
     created() {
-     this.checkLogin()
+     this.setUser()
     },
     methods: {
       ...mapActions({

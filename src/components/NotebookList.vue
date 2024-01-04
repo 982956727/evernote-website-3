@@ -19,7 +19,7 @@
           </router-link>
         </div>
       </div>
-    </main>
+    </main> 
   </div>
 </template>
 
